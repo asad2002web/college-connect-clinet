@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../providers/AuthProvider';
 
 const Navbar = () => {
+    const { user, logOut } = useContext(AuthContext);
+
+    const handleSignOut = () => {
+        logOut()
+          .then(() => {})
+          .catch((error) => console.error(error));
+      };
+
     const navItem = <div className='text-xl flex items-center justify-center'>
         <li><Link>Home</Link></li>
         <li><Link>College</Link></li>
@@ -9,7 +18,7 @@ const Navbar = () => {
         <li><Link>My College</Link></li>
     </div>
     return (
-        <div className="navbar bg-base-100 mb-8">
+        <div className="navbar bg-gray-100 shadow-md mb-8">
             <div className="navbar-start">
                 <div className="dropdown">
                     <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -19,7 +28,7 @@ const Navbar = () => {
                         {navItem}
                     </ul>
                 </div>
-                <a className="btn btn-ghost normal-case text-xl">College Connect</a>
+                <Link className="cursore-pointer text-xl">College Connect</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
@@ -27,7 +36,26 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <Link to='/login' className="btn">Login</Link>
+               
+                {
+                    user ? <div className="dropdown dropdown-end">
+                        <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                            <div className="w-10 rounded-full">
+                                <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                            </div>
+                        </label>
+                        <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+                            <li>
+                                <a className="justify-between">
+                                    Profile
+                                </a>
+                            </li>
+                            <li><a>Settings</a></li>
+                            <li><Link onClick={handleSignOut} to='/'>Logout</Link></li>
+                        </ul>
+                    </div> : <Link to='/login' className="btn">Login</Link>
+                }
+
             </div>
         </div>
     )
